@@ -40,7 +40,7 @@ public struct TransmissionStatistics {
   // todo
 //  let rtt: Int
   
-  let pendingMessageCount: Int
+  public let pendingMessageCount: Int
 }
 
 protocol RTMPSocketDelegate: Actor {
