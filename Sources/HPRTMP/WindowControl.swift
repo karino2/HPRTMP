@@ -68,6 +68,10 @@ actor WindowControl {
   
   // Determines whether the actor should wait for an acknowledgement from a peer.
   var shouldWaitAcknowledgement: Bool {
-    Int64(totalOutBytesCount) - Int64(receivedAcknowledgement) >= windowSize
+    let ret = Int64(totalOutBytesCount) - Int64(receivedAcknowledgement) >= windowSize
+    if ret {
+      print("should wait ack: \(totalOutBytesCount), \(receivedAcknowledgement)")
+    }
+    return ret
   }
 }
