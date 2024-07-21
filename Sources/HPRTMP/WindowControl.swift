@@ -47,6 +47,7 @@ actor WindowControl {
     }
     
     lastReceivedAcknowledgement = size
+    print("updateReceivedAcknowledgement: \(totalOutBytesCount), \(receivedAcknowledgement)")
   }
   
   // Adds to the total count of incoming bytes and triggers the window event if necessary.
@@ -69,8 +70,12 @@ actor WindowControl {
   // Determines whether the actor should wait for an acknowledgement from a peer.
   var shouldWaitAcknowledgement: Bool {
     if totalOutBytesCount > UInt32.max/2 {
-      print("should wait ack, total bytes reached half of max: \(totalOutBytesCount), \(receivedAcknowledgement)")
+      print("should wait ack1, total bytes reached half of max: \(totalOutBytesCount), \(receivedAcknowledgement)")
     }
-    return Int64(totalOutBytesCount) - Int64(receivedAcknowledgement) >= windowSize
+    let ret = Int64(totalOutBytesCount) - Int64(receivedAcknowledgement) >= windowSize
+    if ret {
+      print("should wait ack2, \(totalOutBytesCount), \(receivedAcknowledgement)")
+    }
+    return ret
   }
 }
