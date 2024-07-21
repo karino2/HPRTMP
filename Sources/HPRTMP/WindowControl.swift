@@ -47,7 +47,9 @@ actor WindowControl {
     }
     
     lastReceivedAcknowledgement = size
-    print("updateReceivedAcknowledgement: \(totalOutBytesCount), \(receivedAcknowledgement)")
+    
+    let (diff, of) = totalOutBytesCount.subtractingReportingOverflow(receivedAcknowledgement)
+    print("updateReceivedAcknowledgement: \(totalOutBytesCount), \(receivedAcknowledgement), \(diff), \(of)")
   }
   
   // Adds to the total count of incoming bytes and triggers the window event if necessary.
