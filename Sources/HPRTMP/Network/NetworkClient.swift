@@ -96,9 +96,27 @@ class NetworkClient: NetworkConnectable {
       cachedReceivedData = Data()
       return data
     }
+
+    /*
+    let promise = channel.eventLoop.makePromise(of: Data.self)
+    self.dataPromise = promise
+    return try await promise.futureResult.get()
+     */
     
+    /*
     self.dataPromise = channel.eventLoop.makePromise(of: Data.self)
     return try await dataPromise!.futureResult.get()
+     */
+    self.dataPromise = channel.eventLoop.makePromise(of: Data.self)
+    // --- dataPromise might be cleard in responseReceived between above line and below line. ----
+    guard let promise = dataPromise else {
+      print("DEBUG!!!!! race condition happens!")
+      print("!!!!!!!!!!!!!!!!!!!!!!!")
+      print("!!!!!!!!!!!!!!!!!!!!!!!")
+      print("!!!!!!!!!!!!!!!!!!!!!!!")
+      throw NSError(domain: "RTMPClientError", code: -1, userInfo: [NSLocalizedDescriptionKey: "dataPromise becomes nil: race condition!"])
+    }
+    return try await promise.futureResult.get()
   }
   
   private func responseReceived(data: Data) {
