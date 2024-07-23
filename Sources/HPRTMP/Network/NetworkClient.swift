@@ -143,14 +143,17 @@ class NetworkClient: NetworkConnectable {
     }
     
     if let cache = await dataReserver.tryRetrieveCache() {
+      logger.debug("[HPRTMP] use cachedReceivedData")
       return cache
     }
     
     let waitPromise = channel.eventLoop.makePromise(of: Data.self)
+    logger.debug("[HPRTMP] before wait data")
     return try await dataReserver.waitData(with:waitPromise)
   }
   
   private func responseReceived(data: Data) {
+    logger.debug("[HPRTMP] responseReceived")
     dataReserver.dataArrived(data: data)
   }
   
