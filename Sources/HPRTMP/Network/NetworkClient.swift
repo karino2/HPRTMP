@@ -129,8 +129,11 @@ class NetworkClient: NetworkConnectable {
     if let dataPromise {
       logger.debug("[HPRTMP] before dataPromise.succeed")
       dataPromise.succeed(cachedReceivedData)
+      logger.debug("[HPRTMP] after dataPromise.succeed")
       cachedReceivedData = Data()
+      logger.debug("[HPRTMP] cachedReceivedData cleard")
       self.dataPromise = nil
+      logger.debug("[HPRTMP] dataPromise cleared")
     } else {
       logger.debug("[HPRTMP] dataPromise is nil")
     }
