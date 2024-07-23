@@ -109,6 +109,7 @@ class NetworkClient: NetworkConnectable {
      */
     self.dataPromise = channel.eventLoop.makePromise(of: Data.self)
     // --- dataPromise might be cleard in responseReceived between above line and below line. ----
+    logger.debug("[HPRTMP] before future get")
     let ret = try await dataPromise?.futureResult.get()
     guard let ret else {
       print("DEBUG!!!!! race condition happens!")
@@ -117,10 +118,12 @@ class NetworkClient: NetworkConnectable {
       print("!!!!!!!!!!!!!!!!!!!!!!!")
       throw NSError(domain: "RTMPClientError", code: -1, userInfo: [NSLocalizedDescriptionKey: "dataPromise becomes nil: race condition!"])
     }
+    logger.debug("[HPRTMP] after future get")
     return ret
   }
   
   private func responseReceived(data: Data) {
+    logger.debug("[HPRTMP] responseReceived")
     cachedReceivedData.append(data)
     if let dataPromise {
       dataPromise.succeed(cachedReceivedData)
