@@ -92,6 +92,7 @@ class NetworkClient: NetworkConnectable {
       throw NSError(domain: "RTMPClientError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Connection not established"])
     }
     if !cachedReceivedData.isEmpty {
+      logger.debug("[HPRTMP] use cachedReceivedData")
       let data = cachedReceivedData
       cachedReceivedData = Data()
       return data
@@ -126,9 +127,12 @@ class NetworkClient: NetworkConnectable {
     logger.debug("[HPRTMP] responseReceived")
     cachedReceivedData.append(data)
     if let dataPromise {
+      logger.debug("[HPRTMP] before dataPromise.succeed")
       dataPromise.succeed(cachedReceivedData)
       cachedReceivedData = Data()
       self.dataPromise = nil
+    } else {
+      logger.debug("[HPRTMP] dataPromise is nil")
     }
   }
   
